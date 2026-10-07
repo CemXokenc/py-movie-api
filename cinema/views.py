@@ -9,7 +9,7 @@ from cinema.serializers import MovieSerializer
 
 
 @api_view(["GET", "POST"])
-def movie_list(request: Request) -> Response | None:
+def movie_list(request: Request):
     if request.method == "GET":
         movies = Movie.objects.all()
         serializer = MovieSerializer(movies, many=True)
@@ -22,11 +22,10 @@ def movie_list(request: Request) -> Response | None:
         serializer.save()
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return None
 
 
 @api_view(["GET", "POST", "DELETE"])
-def movie_detail(request: Request, movie_id: int) -> Response | None:
+def movie_detail(request: Request, movie_id: int):
     movie = get_object_or_404(Movie, id=movie_id)
 
     if request.method == "GET":
@@ -45,4 +44,3 @@ def movie_detail(request: Request, movie_id: int) -> Response | None:
         movie.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
-    return None
