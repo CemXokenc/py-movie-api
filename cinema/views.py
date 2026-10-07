@@ -24,21 +24,21 @@ def movie_list(request: Request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-@api_view(["GET", "POST", "DELETE"])
-def movie_detail(request: Request, movie_id: int):
-    movie = get_object_or_404(Movie, id=movie_id)
+@api_view(["GET", "PUT", "DELETE"])
+def movie_detail(request: Request, pk: int):
+    movie = get_object_or_404(Movie, pk=pk)
 
     if request.method == "GET":
         serializer = MovieSerializer(movie)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    if request.method == "POST":
-        serializer = MovieSerializer(data=request.data)
+    if request.method == "PUT":
+        serializer = MovieSerializer(movie, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     if request.method == "DELETE":
         movie.delete()
